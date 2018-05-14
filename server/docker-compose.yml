@@ -1,0 +1,36 @@
+version: '3.2'
+services:
+    nodeserver:
+        image: budgetmanager:latest
+        build:
+            context: .
+            dockerfile: ./env/node-server/Dockerfile
+        container_name: budgetmanager_nodeserver
+        environment:
+            - PORT=8080
+            - NODE_ENV=development
+            - MONGO_HOST=mongodb
+            - MONGO_DB=budgetmanager
+        ports:
+            - 8080:8080
+        volumes:
+            - type: bind
+              source: ./src
+              target: /srv/www
+        links:
+            - mongodb
+        depends_on:
+            - mongodb
+    mongodb:
+        image: mongo:latest
+        container_name: budgetmanager_mongodb
+        environment:
+          - MONGO_DB=/dev/null
+        volumes:
+           - mongodb-data:/data/db
+        ports:
+            - 27017:27017
+        command: mongod --smallfiles
+
+volumes:
+    mongodb-data:
