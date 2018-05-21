@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Category = mongoose.model('Category', new Schema({
+const Account = mongoose.model('Account', new Schema({
     name:  {type: String, unique: true, required: true},
-    color: {type: String, default: '#fff'}
+    startAmount: {type: Number, default: 0}
 }));
 
-module.exports = Category;
+module.exports = Account;

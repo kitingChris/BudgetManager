@@ -2,6 +2,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 3000;
 const MONGO_HOST = process.env.MONGO_HOST || '127.0.0.1';
@@ -15,6 +16,7 @@ mongoose.connect(MONGO_URI)
 
         const server = express();
 
+        server.use(bodyParser.json());
         server.use(express.static(__dirname + '/public'));
         server.use(require('./controller'));
 

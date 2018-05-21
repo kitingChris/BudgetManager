@@ -1,23 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const Category = require('../model/Category');
+const Account = require('../model/Account');
 
 router.get('/', function(request, response) {
-    Category.find(function(error, categories) {
-        response.json(categories);
+    Account.find(function(error, accounts) {
+        response.json(accounts);
     });
 });
 
 router.get('/:name', function(request, response) {
     const name = request.params.name;
-    Category.where({name: name}).findOne(function(error, category) {
-        if(!category) {
+    Account.where({name: name}).findOne(function(error, account) {
+        if(!account) {
             response.status(404).json({
-                error: `Category '${name}' not found`
+                error: `Account '${name}' not found`
             });
             return;
         }
-        response.json(category);
+        response.json(account);
     });
 });
 
@@ -25,25 +25,25 @@ router.post('/', function(request, response) {
 
     if(typeof request.body.name !== 'string' || request.body.name.length === 0) {
         response.status(422).json({
-            error: "Category name not given"
+            error: "Account name not given"
         });
         return;
     }
 
-    const category = new Category({name: request.body.name, color: request.body.color});
+    const account = new Account({name: request.body.name, color: request.body.startAmount || 0});
 
-    category.save(function (error) {
+    account.save(function (error) {
         if(error) {
             if(error.code === 11000) {
-                response.status(409).json({error: 'Category already exists'});
+                response.status(409).json({error: 'Account already exists'});
             }
             else {
                 console.error(error);
-                response.status(500).json({error: 'Category save failed'})
+                response.status(500).json({error: 'Account save failed'})
             }
         }
         else {
-            response.json(category);
+            response.json(account);
         }
 
     });
